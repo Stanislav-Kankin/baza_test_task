@@ -85,3 +85,13 @@
 Прошу:
 1) Какие DNS-записи создать для поддомена baza.<domain> на мой сервер.
 2) Как проверить, что DNS применился (nslookup/dig).
+
+2026-02-26 13:07 MSK
+
+Контекст: деплой на VPS. Seed падает, потому что таблиц нет (relation "users" does not exist).
+Alembic history пустой: миграции не применены / нет ревизий в migrations/versions.
+
+Прошу:
+1) Проверить наличие ревизий в migrations/versions.
+2) Если ревизий нет — сгенерировать alembic revision --autogenerate и применить alembic upgrade head.
+3) Проверить таблицы через psql \dt и после этого запускать seed.
