@@ -1,0 +1,6 @@
+
+# ADD TO main.py
+
+from app.routers.requests import router as requests_router
+
+app.include_router(requests_router)
