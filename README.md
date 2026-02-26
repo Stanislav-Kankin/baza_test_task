@@ -1,1 +1,6 @@
-# baza_test_task
+# Repair Service Requests (Test Task)
+
+## 🚀 Запуск
+
+```bash
+docker compose up --build

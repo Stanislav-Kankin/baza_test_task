@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: baza_db
+    restart: always
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: baza_app
+    depends_on:
+      - db
+    env_file:
+      - .env.example
+    ports:
+      - "8090:8090"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8090 --reload
+
+volumes:
+  pg_data:
