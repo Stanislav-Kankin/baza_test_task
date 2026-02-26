@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Логин (упрощённо)</h2>
+<p class="muted">Выбери пользователя. Мы сохраним <code>user_id</code> в cookie.</p>
+
+<div class="card">
+  <form method="post" action="/ui/login">
+    <label>Пользователь:</label><br>
+    <select name="user_id" required>
+      {% for u in users %}
+        <option value="{{ u.id }}">{{ u.username }} ({{ u.role }})</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Войти</button>
+  </form>
+</div>
+{% endblock %}

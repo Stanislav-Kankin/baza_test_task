@@ -5,10 +5,12 @@ from sqlalchemy import text
 
 from app.core.db import get_db
 from app.routers.requests import router as requests_router
+from app.routers.ui import router as ui_router
 
 app = FastAPI(title="Repair Service Requests")
 
 app.include_router(requests_router)
+app.include_router(ui_router)
 
 @app.get("/health")
 def health(db: Session = Depends(get_db)):

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Панель мастера</h2>
+
+{% if not current_user or current_user.role != "master" %}
+  <div class="error">
+    Нужно залогиниться пользователем с ролью <code>master</code>.
+    Перейди в <a href="/ui/login">Логин</a>.
+  </div>
+{% else %}
+  <p class="muted">Показываю заявки, назначенные на тебя (assigned_to_id={{ current_user.id }}).</p>
+
+  {% for r in requests %}
+    <div class="card">
+      <div class="row" style="justify-content:space-between;">
+        <div>
+          <strong>#{{ r.id }}</strong>
+          <span class="badge">{{ r.status }}</span>
+        </div>
+        <div class="muted">{{ r.updated_at }}</div>
+      </div>
+
+      <div style="margin-top:8px;">
+        <div><strong>{{ r.client_name }}</strong> · {{ r.phone }}</div>
+        <div class="muted">{{ r.address }}</div>
+        <div style="margin-top:6px;">{{ r.problem_text }}</div>
+      </div>
+
+      <div style="margin-top:10px;" class="row">
+        {% if r.status == "assigned" %}
+          <form method="post" action="/ui/master/take" class="inline">
+            <input type="hidden" name="request_id" value="{{ r.id }}">
+            <button type="submit">Взять в работу</button>
+          </form>
+        {% endif %}
+
+        {% if r.status == "in_progress" %}
+          <form method="post" action="/ui/master/complete" class="inline">
+            <input type="hidden" name="request_id" value="{{ r.id }}">
+            <button type="submit">Завершить</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+  {% if requests|length == 0 %}
+    <p class="muted">У тебя пока нет назначенных заявок.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

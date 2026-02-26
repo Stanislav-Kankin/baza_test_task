@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Панель диспетчера</h2>
+
+<form method="get" action="/ui/dispatcher" class="card">
+  <div class="row" style="align-items:end;">
+    <div>
+      <div class="muted">Фильтр по статусу</div>
+      <select name="status">
+        <option value="">(все)</option>
+        {% for st in statuses %}
+          <option value="{{ st }}" {% if st == status_filter %}selected{% endif %}>{{ st }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="secondary">Применить</button>
+    </div>
+  </div>
+</form>
+
+{% for r in requests %}
+  <div class="card">
+    <div class="row" style="justify-content:space-between;">
+      <div>
+        <strong>#{{ r.id }}</strong>
+        <span class="badge">{{ r.status }}</span>
+        {% if r.assigned_to_id %}
+          <span class="muted">assigned_to_id={{ r.assigned_to_id }}</span>
+        {% endif %}
+      </div>
+      <div class="muted">{{ r.created_at }}</div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <div><strong>{{ r.client_name }}</strong> · {{ r.phone }}</div>
+      <div class="muted">{{ r.address }}</div>
+      <div style="margin-top:6px;">{{ r.problem_text }}</div>
+    </div>
+
+    <div style="margin-top:10px;" class="row">
+      <form method="post" action="/ui/dispatcher/assign" class="inline">
+        <input type="hidden" name="request_id" value="{{ r.id }}">
+        <select name="master_id">
+          {% for m in masters %}
+            <option value="{{ m.id }}">{{ m.username }} (id={{ m.id }})</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Назначить</button>
+      </form>
+
+      <form method="post" action="/ui/dispatcher/cancel" class="inline">
+        <input type="hidden" name="request_id" value="{{ r.id }}">
+        <button type="submit" class="secondary">Отменить</button>
+      </form>
+    </div>
+  </div>
+{% endfor %}
+
+{% if requests|length == 0 %}
+  <p class="muted">Заявок нет.</p>
+{% endif %}
+{% endblock %}
