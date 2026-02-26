@@ -95,3 +95,13 @@ Alembic history пустой: миграции не применены / нет 
 1) Проверить наличие ревизий в migrations/versions.
 2) Если ревизий нет — сгенерировать alembic revision --autogenerate и применить alembic upgrade head.
 3) Проверить таблицы через psql \dt и после этого запускать seed.
+
+2026-02-26 13:10 MSK
+
+Контекст: деплой на VPS. Seed падает: relation "users" does not exist.
+Проверка показала, что папка migrations/versions пуста (только .gitkeep), поэтому alembic history/current пустые.
+
+Прошу:
+1) Сгенерировать первичную миграцию alembic revision --autogenerate -m "init tables".
+2) Применить миграции alembic upgrade head.
+3) Проверить наличие таблиц через psql \dt и после этого запустить seed.
